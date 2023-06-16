@@ -52,11 +52,14 @@ class Name(Field):
 
 
 class Phone(Field):
-    def __init__(self, value=None):
-        super().__init__(value)
+    def __init__(self):
+        super().__init__()
         self.value = []
 
     def add_number(self, number):
+        # Перевірка на правильність номера телефону
+        if not number.isdigit() or len(number) != 10:
+            raise ValueError("Invalid phone number.")
         self.value.append(number)
 
     def remove_number(self, number):
@@ -71,6 +74,13 @@ class Phone(Field):
     def value(self, new_value):
         self._value = new_value
 
+def is_valid_date(date):
+    try:
+        datetime.strptime(date, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
 
 class Birthday(Field):
     def __init__(self, value):
@@ -82,6 +92,9 @@ class Birthday(Field):
 
     @value.setter
     def value(self, new_value):
+        # Перевірка на правильність дня народження
+        if not is_valid_date(new_value):
+            raise ValueError("Invalid birthday.")
         self._value = new_value
 
 
